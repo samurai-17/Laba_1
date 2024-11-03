@@ -38,6 +38,12 @@ class Bus(Public_Transport): #класс Bus наследуется от Public_
         elif 100 > self._capacity > 50:
             print("максимальная скорость равна", 35)
 
+class tram(Public_Transport): #класс Bus наследуется от Public_Transport
+    def __init__(self, name, number):
+        self._name = name
+        self._number = number
+
+
 
 t = Bus("Галина", 40)
 print(t)
