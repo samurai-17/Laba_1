@@ -1,4 +1,4 @@
-from PublicTransport import PublicTransport
+from PublicTransport import *
 
 
 class Tram(PublicTransport):  # класс tram наследуется от PublicTransport
@@ -29,6 +29,27 @@ class Tram(PublicTransport):  # класс tram наследуется от Publ
         )
         tram._passengers = data["passengers"]
         tram._current_stop = data["current_stop"]
+        return tram
+
+    def to_xml(self):
+        element = super().to_xml()
+        element.tag = "Tram"
+        ET.SubElement(element, "route_number").text = str(self._route_number)
+        ET.SubElement(element, "passengers").text = str(self._passengers)
+        ET.SubElement(element, "current_stop").text = str(self._current_stop) if self._current_stop else ""
+        return element
+
+    @classmethod
+    def from_xml(cls, element):
+        tram = cls(
+            id=int(element.find("id").text),
+            name=element.find("name").text,
+            capacity=int(element.find("capacity").text),
+            speed=int(element.find("speed").text),
+            route_number=int(element.find("route_number").text)
+        )
+        tram._passengers = int(element.find("passengers").text)
+        tram._current_stop = element.find("current_stop").text or None
         return tram
 
     def start(self):
@@ -85,4 +106,3 @@ class Tram(PublicTransport):  # класс tram наследуется от Publ
             else:
                 print(f"В трамвае всего {self._passengers} пассажиров, высадка всех.")
                 self._passengers = 0
-

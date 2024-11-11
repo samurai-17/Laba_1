@@ -1,3 +1,6 @@
+import xml.etree.ElementTree as ET
+
+
 class PublicTransport:
     def __init__(self, id, name, capacity, speed):  # значение по умолчанию
         self._id = id
@@ -37,6 +40,24 @@ class PublicTransport:
             name=data["name"],
             capacity=data["capacity"],
             speed=data["speed"]
+        )
+
+    def to_xml(self):
+        element = ET.Element("PublicTransport")
+        ET.SubElement(element, "id").text = str(self._id)
+        ET.SubElement(element, "name").text = self._name
+        ET.SubElement(element, "capacity").text = str(self._capacity)
+        ET.SubElement(element, "speed").text = str(self._speed)
+        ET.SubElement(element, "in_motion").text = str(self._in_motion)
+        return element
+
+    @classmethod
+    def from_xml(cls, element):
+        return cls(
+            id=int(element.find("id").text),
+            name=element.find("name").text,
+            capacity=int(element.find("capacity").text),
+            speed=int(element.find("speed").text)
         )
 
     def __repr__(self):

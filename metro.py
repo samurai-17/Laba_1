@@ -1,4 +1,4 @@
-from PublicTransport import PublicTransport
+from PublicTransport import *
 
 
 class Metro(PublicTransport):  # класс Metro наследуется от PublicTransport
@@ -38,6 +38,36 @@ class Metro(PublicTransport):  # класс Metro наследуется от Pu
         metro._current_station = data["current_station"]
         metro._passengers = data["passengers"]
         metro._direction = data["direction"]
+        return metro
+
+    def to_xml(self):
+        element = super().to_xml()
+        element.tag = "Metro"
+        ET.SubElement(element, "line_name").text = self._line_name
+        stations_element = ET.SubElement(element, "stations")
+        for station in self._stations:
+            ET.SubElement(stations_element, "station").text = station
+        ET.SubElement(element, "interval").text = str(self._interval)
+        ET.SubElement(element, "current_station").text = self._current_station
+        ET.SubElement(element, "passengers").text = str(self._passengers)
+        ET.SubElement(element, "direction").text = str(self._direction)
+        return element
+
+    @classmethod
+    def from_xml(cls, element):
+        stations = [station.text for station in element.find("stations").findall("station")]
+        metro = cls(
+            id=int(element.find("id").text),
+            name=element.find("name").text,
+            capacity=int(element.find("capacity").text),
+            speed=int(element.find("speed").text),
+            line_name=element.find("line_name").text,
+            stations=stations,
+            interval=int(element.find("interval").text)
+        )
+        metro._current_station = element.find("current_station").text
+        metro._passengers = int(element.find("passengers").text)
+        metro._direction = int(element.find("direction").text)
         return metro
 
     def start(self):
@@ -106,4 +136,3 @@ class Metro(PublicTransport):  # класс Metro наследуется от Pu
         else:
             print("Скорость и дистанция должны быть положительными для расчета времени.")
             return None
-

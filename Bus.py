@@ -1,4 +1,4 @@
-from PublicTransport import PublicTransport
+from PublicTransport import *
 
 
 class Bus(PublicTransport):  # класс Bus наследуется от Public_Transport
@@ -32,7 +32,29 @@ class Bus(PublicTransport):  # класс Bus наследуется от Public
         bus._current_stop = data["current_stop"]
         return bus
 
+    def to_xml(self):
+        element = super().to_xml()
+        element.tag = "Bus"
+        ET.SubElement(element, "route_number").text = str(self._route_number)
+        ET.SubElement(element, "passengers").text = str(self._passengers)
+        ET.SubElement(element, "current_stop").text = str(self._current_stop) if self._current_stop else ""
+        return element
+
+    @classmethod
+    def from_xml(cls, element):
+        bus = cls(
+            id=int(element.find("id").text),
+            name=element.find("name").text,
+            capacity=int(element.find("capacity").text),
+            speed=int(element.find("speed").text),
+            route_number=int(element.find("route_number").text)
+        )
+        bus._passengers = int(element.find("passengers").text)
+        bus._current_stop = element.find("current_stop").text or None
+        return bus
+
     def set_capacity(self):
+        """Установка вместимости из консоли."""
         try:
             self._capacity = int(input("вместимость драндулета: "))
             while self._capacity >= 100 or self._capacity <= 10:
@@ -105,4 +127,3 @@ class Bus(PublicTransport):  # класс Bus наследуется от Public
         else:
             print("Скорость автобуса и его вместимость должны быть положительными для расчета времени.")
             return None
-

@@ -12,6 +12,7 @@
 
 from CRUD import TransportManager
 import database
+from database_xml import *
 
 manager = TransportManager()
 
@@ -74,7 +75,7 @@ metro.alight_passengers(50)
 
 # Рассчитываем время до следующей станции (например, расстояние 5 км)
 metro.calculate_time_to_next_station(distance=5)
-
+print("------------------------------------")
 # Json
 transport_list = [bus, tram, metro]
 
@@ -85,5 +86,19 @@ database.save_to_json("transport_data.json", transport_list)
 loaded_transport = database.load_from_json("transport_data.json")
 
 # Проверяем, что данные загружены корректно
+print("Json")
 for transport in loaded_transport:
     print(transport.to_dict())
+print("------------------------------------")
+
+# Сохраняем в XML-файл
+save_to_xml("transport_data.xml", transport_list)
+
+# Загружаем из XML-файла
+loaded_transport = load_from_xml("transport_data.xml")
+
+# Проверяем, что данные загружены корректно
+print("XML")
+for transport in loaded_transport:
+    print(ET.tostring(transport.to_xml(), encoding="utf-8").decode("utf-8"))
+print("------------------------------------")
