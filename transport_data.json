@@ -1,0 +1,43 @@
+[
+    {
+        "type": "Bus",
+        "id": 1,
+        "name": "Bus",
+        "capacity": 78,
+        "speed": 30,
+        "in_motion": true,
+        "route_number": 13,
+        "passengers": 20,
+        "current_stop": null
+    },
+    {
+        "type": "Tram",
+        "id": 2,
+        "name": "Tram",
+        "capacity": 50,
+        "speed": 40,
+        "in_motion": true,
+        "route_number": 5,
+        "passengers": 30,
+        "current_stop": null
+    },
+    {
+        "type": "Metro",
+        "id": 3,
+        "name": "Metro",
+        "capacity": 200,
+        "speed": 70,
+        "in_motion": false,
+        "line_name": "Кольцевая",
+        "stations": [
+            "Депо",
+            "Станция А",
+            "Станция Б",
+            "Станция В"
+        ],
+        "interval": 10,
+        "current_station": "Станция Б",
+        "passengers": 100,
+        "direction": 1
+    }
+]
